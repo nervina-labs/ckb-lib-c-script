@@ -44,7 +44,7 @@ extern "C" {
         values: *const u8,
         proof: *const u8,
         proof_length: u32,
-    ) -> i32;
+    ) -> isize;
 }
 
 impl LibCKBSmt {
@@ -107,7 +107,7 @@ impl LibCKBSmt {
             )
         };
         if res != 0 {
-            Err(res)
+            Err(res as i32)
         } else {
             Ok(())
         }

@@ -62,7 +62,7 @@ extern "C" {
         msg_size: u64,
         output: *mut u8,
         output_len: *mut u64,
-    ) -> i32;
+    ) -> isize;
     // fn validate_signature_secp256k1(
     //     prefilled_data: *const u8,
     //     signature_buffer: *const u8,
@@ -157,7 +157,7 @@ impl LibRSA {
         };
 
         if error_code != 0 {
-            return Err(error_code);
+            return Err(error_code as i32);
         }
         debug_assert_eq!(pubkeyhash.0.len() as u64, len);
         Ok(pubkeyhash)

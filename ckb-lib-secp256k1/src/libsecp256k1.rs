@@ -56,7 +56,7 @@ pub struct LibSecp256k1 {
 
 #[link(name = "dl-c-impl")]
 extern "C" {
-    fn load_prefilled_data(data: *mut u8, len: *mut u64) -> i32;
+    fn load_prefilled_data(data: *mut u8, len: *mut u64) -> isize;
     //     fn validate_signature_rsa(
     //         prefilled_data: *const u8,
     //         signature_buffer: *const u8,
@@ -74,8 +74,8 @@ extern "C" {
         msg_size: u64,
         output: *mut u8,
         output_len: *mut u64,
-    ) -> i32;
-    fn validate_secp256k1_blake2b_sighash_all(output_public_key_hash: *mut u8) -> i32;
+    ) -> isize;
+    fn validate_secp256k1_blake2b_sighash_all(output_public_key_hash: *mut u8) -> isize;
     //     fn ckb_smt_verify(
     //         root: *const u8,
     //         smt_pair_len: u32,
@@ -113,7 +113,7 @@ impl LibSecp256k1 {
         let error_code =
             unsafe { validate_secp256k1_blake2b_sighash_all(pubkey_hash.as_mut_ptr()) };
         if error_code != 0 {
-            return Err(error_code);
+            return Err(error_code as i32);
         }
         Ok(())
     }
@@ -129,7 +129,7 @@ impl LibSecp256k1 {
         // let error_code = unsafe { f(data.as_mut_ptr(), &mut len as *mut u64) };
         let error_code = unsafe { load_prefilled_data(data.as_mut_ptr(), &mut len as *mut u64) };
         if error_code != 0 {
-            return Err(error_code);
+            return Err(error_code as i32);
         }
         Ok(PrefilledData(data))
     }
@@ -169,7 +169,7 @@ impl LibSecp256k1 {
         };
 
         if error_code != 0 {
-            return Err(error_code);
+            return Err(error_code as i32);
         }
         debug_assert_eq!(pubkey.0.len() as u64, len);
         Ok(pubkey)
