@@ -43,13 +43,6 @@ fn main() {
         hash
     )
     .expect("write to code_hashes.rs");
-
-    let dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-    println!(
-        "cargo:rustc-link-search=native={}",
-        Path::new(&dir).join("lib").display()
-    );
-    println!("cargo:rustc-link-lib=static=rsa_secp256k1");
 }
 
 pub fn new_blake2b() -> Blake2b {

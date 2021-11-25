@@ -2,5 +2,3 @@ target/*
 .vscode/*
 */build/*
 Cargo.lock
-/ckb-miscellaneous-scripts
-.history
