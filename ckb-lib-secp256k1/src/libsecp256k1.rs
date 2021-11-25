@@ -1,5 +1,8 @@
+use crate::alloc::{
+    alloc::{alloc, Layout},
+    boxed::Box,
+};
 use crate::code_hashes::CODE_HASH_SECP256K1;
-use crate::alloc::{alloc::{alloc, Layout}, boxed::Box};
 use ckb_std::dynamic_loading_c_impl::{CKBDLContext, Symbol};
 
 /// function signature of validate_secp256k1_blake2b_sighash_all
@@ -51,6 +54,37 @@ pub struct LibSecp256k1 {
     load_prefilled_data: Symbol<LoadPrefilledData>,
 }
 
+extern "C" {
+    fn load_prefilled_data(data: *mut u8, len: *mut u64) -> isize;
+    //     fn validate_signature_rsa(
+    //         prefilled_data: *const u8,
+    //         signature_buffer: *const u8,
+    //         signature_size: u64,
+    //         msg_buf: *const u8,
+    //         msg_size: u64,
+    //         output: *mut u8,
+    //         output_len: *mut u64,
+    //     ) -> i32;
+    fn validate_signature_secp256k1(
+        prefilled_data: *const u8,
+        signature_buffer: *const u8,
+        signature_size: u64,
+        msg_buf: *const u8,
+        msg_size: u64,
+        output: *mut u8,
+        output_len: *mut u64,
+    ) -> isize;
+    fn validate_secp256k1_blake2b_sighash_all(output_public_key_hash: *mut u8) -> isize;
+    //     fn ckb_smt_verify(
+    //         root: *const u8,
+    //         smt_pair_len: u32,
+    //         keys: *const u8,
+    //         values: *const u8,
+    //         proof: *const u8,
+    //         proof_length: u32,
+    //     ) -> i32;
+}
+
 impl LibSecp256k1 {
     pub fn load<T>(context: &mut CKBDLContext<T>) -> Self {
         // load library
@@ -73,10 +107,12 @@ impl LibSecp256k1 {
     }
 
     pub fn validate_blake2b_sighash_all(&self, pubkey_hash: &mut [u8; 20]) -> Result<(), i32> {
-        let f = &self.validate_blake2b_sighash_all;
-        let error_code = unsafe { f(pubkey_hash.as_mut_ptr()) };
+        // let f = &self.validate_blake2b_sighash_all;
+        // let error_code = unsafe { f(pubkey_hash.as_mut_ptr()) };
+        let error_code =
+            unsafe { validate_secp256k1_blake2b_sighash_all(pubkey_hash.as_mut_ptr()) };
         if error_code != 0 {
-            return Err(error_code);
+            return Err(error_code as i32);
         }
         Ok(())
     }
@@ -88,10 +124,11 @@ impl LibSecp256k1 {
             Box::from_raw(raw_allocation)
         };
         let mut len: u64 = SECP256K1_DATA_SIZE as u64;
-        let f = &self.load_prefilled_data;
-        let error_code = unsafe { f(data.as_mut_ptr(), &mut len as *mut u64) };
+        // let f = &self.load_prefilled_data;
+        // let error_code = unsafe { f(data.as_mut_ptr(), &mut len as *mut u64) };
+        let error_code = unsafe { load_prefilled_data(data.as_mut_ptr(), &mut len as *mut u64) };
         if error_code != 0 {
-            return Err(error_code);
+            return Err(error_code as i32);
         }
         Ok(PrefilledData(data))
     }
@@ -105,9 +142,21 @@ impl LibSecp256k1 {
         let mut pubkey = Pubkey::default();
         let mut len: u64 = pubkey.0.len() as u64;
 
-        let f = &self.validate_signature;
+        // let f = &self.validate_signature;
+        // let error_code = unsafe {
+        //     f(
+        //         prefilled_data.0.as_ptr(),
+        //         signature.as_ptr(),
+        //         signature.len() as u64,
+        //         message.as_ptr(),
+        //         message.len() as u64,
+        //         pubkey.0.as_mut_ptr(),
+        //         &mut len as *mut u64,
+        //     )
+        // };
+
         let error_code = unsafe {
-            f(
+            validate_signature_secp256k1(
                 prefilled_data.0.as_ptr(),
                 signature.as_ptr(),
                 signature.len() as u64,
@@ -117,8 +166,9 @@ impl LibSecp256k1 {
                 &mut len as *mut u64,
             )
         };
+
         if error_code != 0 {
-            return Err(error_code);
+            return Err(error_code as i32);
         }
         debug_assert_eq!(pubkey.0.len() as u64, len);
         Ok(pubkey)
