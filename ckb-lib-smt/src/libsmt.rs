@@ -15,7 +15,6 @@ pub struct LibCKBSmt {
     smt_verify: Symbol<CKBSmtVerify>,
 }
 
-#[link(name = "dl-c-impl")]
 extern "C" {
     // fn load_prefilled_data(data: *mut u8, len: *mut u64) -> i32;
     //     fn validate_signature_rsa(

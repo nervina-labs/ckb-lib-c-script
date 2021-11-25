@@ -54,7 +54,6 @@ pub struct LibSecp256k1 {
     load_prefilled_data: Symbol<LoadPrefilledData>,
 }
 
-#[link(name = "dl-c-impl")]
 extern "C" {
     fn load_prefilled_data(data: *mut u8, len: *mut u64) -> isize;
     //     fn validate_signature_rsa(
