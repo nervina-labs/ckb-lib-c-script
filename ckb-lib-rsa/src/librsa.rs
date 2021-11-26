@@ -4,10 +4,7 @@ use crate::alloc::{
     vec::*,
 };
 use crate::code_hashes::CODE_HASH_RSA;
-use ckb_std::{
-    debug,
-    dynamic_loading_c_impl::{CKBDLContext, Symbol},
-};
+use ckb_std::dynamic_loading_c_impl::{CKBDLContext, Symbol};
 use email_rs::Email;
 
 const CKB_VERIFY_RSA: u8 = 1;
@@ -124,7 +121,7 @@ impl LibRSA {
             .into_iter()
             .zip(email.dkim_headers.iter())
             .find(|(dkim_msg, dkim_header)| {
-                let handle = ||{
+                let handle = || {
                     let sig = &dkim_header.signature;
                     let rsa_info = LibRSA::get_rsa_info(&n, e, &sig)?;
 

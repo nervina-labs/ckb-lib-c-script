@@ -10,15 +10,6 @@ checksum = "3441f0f7b02788e948e47f457ca01f1d7e6d92c693bc132c22b087d3141c03ff"
 
 [[package]]
 name = "blake2b-rs"
-version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e35e362830ef90ecea16f09b21b75d22d33a8562a679c74ab4f4fa49b4fcb87"
-dependencies = [
- "cc",
-]
-
-[[package]]
-name = "blake2b-rs"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a89a8565807f21b913288968e391819e7f9b2f0f46c7b89549c051cccf3a2771"
@@ -50,12 +41,6 @@ checksum = "d26a6ce4b6a484fa3edb70f7efa6fc430fd2b87285fe8b84304fd0936faa0dc0"
 
 [[package]]
 name = "cfg-if"
-version = "0.1.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
-
-[[package]]
-name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
@@ -64,7 +49,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 name = "ckb-lib-rsa"
 version = "0.1.0"
 dependencies = [
- "blake2b-rs 0.1.5",
+ "blake2b-rs",
  "ckb-std",
  "email-rs",
  "sha2",
@@ -74,7 +59,7 @@ dependencies = [
 name = "ckb-lib-secp256k1"
 version = "0.1.0"
 dependencies = [
- "blake2b-rs 0.1.5",
+ "blake2b-rs",
  "ckb-std",
 ]
 
@@ -82,30 +67,31 @@ dependencies = [
 name = "ckb-lib-smt"
 version = "0.1.0"
 dependencies = [
- "blake2b-rs 0.2.0",
+ "blake2b-rs",
  "cc",
  "ckb-std",
 ]
 
 [[package]]
 name = "ckb-standalone-types"
-version = "0.0.1-pre.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af2cdbdf65ee5b1da71504f5a03d6984bce77d0b4b46daff63f4ba4a3b0eef08"
+checksum = "22d7cbbdab96e6b809a102cf88bfec28795a0a3c06bfdea4abe4de89777801cd"
 dependencies = [
- "cfg-if 0.1.10",
+ "cfg-if",
  "molecule",
 ]
 
 [[package]]
 name = "ckb-std"
-version = "0.7.4"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5247e68ff32c17714105e2460db6113fb99efde8c830bbdd99f8bf715100dd64"
+checksum = "e5761f11372e794d77b8e8a8059b22c5d6ccef907588dd5302a669f056ecce6b"
 dependencies = [
  "buddy-alloc",
  "cc",
  "ckb-standalone-types",
+ "cstr_core",
 ]
 
 [[package]]
@@ -115,6 +101,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95059428f66df56b63431fdb4e1947ed2190586af5c5a8a8b71122bdf5a7f469"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "cstr_core"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "917ba9efe9e1e736671d5a03f006afc4e7e3f32503e2077e0bcaf519c0c8c1d3"
+dependencies = [
+ "cty",
+ "memchr",
 ]
 
 [[package]]
@@ -157,12 +153,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2a5ac8f984bfcf3a823267e5fde638acc3325f6496633a5da6bb6eb2171e103"
 
 [[package]]
-name = "molecule"
-version = "0.6.1"
+name = "memchr"
+version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3067ceba3d7f5dcc7427cfc584fc506e756f1161151032fec840455f5a3c2fd5"
+checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
+
+[[package]]
+name = "molecule"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be5f63176422224eadd975789462a96cedaf339cd1009ef92fbdfaad39d35f5f"
 dependencies = [
- "cfg-if 0.1.10",
+ "cfg-if",
 ]
 
 [[package]]
@@ -178,7 +180,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b69f9a4c9740d74c5baa3fd2e547f9525fa8088a8a958e0ca2409a514e33f5fa"
 dependencies = [
  "block-buffer",
- "cfg-if 1.0.0",
+ "cfg-if",
  "cpufeatures",
  "digest",
  "opaque-debug",
