@@ -1,8 +1,5 @@
-
 use alloc::vec::Vec;
-use ckb_std::{
-    dynamic_loading_c_impl::{CKBDLContext, Symbol},
-};
+use ckb_std::dynamic_loading_c_impl::{CKBDLContext, Symbol};
 
 const CKB_SMT_VEIRFY: &[u8; 14] = b"ckb_smt_verify";
 type CKBSmtVerify = unsafe extern "C" fn(
@@ -43,9 +40,7 @@ impl LibCKBSmt {
         let keys = keys.chunks(32).collect::<Vec<_>>();
         let values = values.chunks(32).collect::<Vec<_>>();
 
-        if keys.last().ok_or(-1)?.len() != 32
-            || values.last().ok_or(-1)?.len() != 32
-        {
+        if keys.last().ok_or(-1)?.len() != 32 || values.last().ok_or(-1)?.len() != 32 {
             return Err(-2);
         }
 

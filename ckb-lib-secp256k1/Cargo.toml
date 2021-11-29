@@ -8,10 +8,10 @@ description = "CKB secp256k1 dynamic linking library"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ckb-std = {version = "0.7.4",optional = true}
+ckb-std = {version = "0.9",optional = true}
 
 [build-dependencies]
-blake2b-rs = "0.1.5"
+blake2b-rs = "0.2"
 
 [features]
 no_std = ["ckb-std"]
