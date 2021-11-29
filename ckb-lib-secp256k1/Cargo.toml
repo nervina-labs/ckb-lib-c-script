@@ -1,6 +1,6 @@
 [package]
 name = "ckb-lib-secp256k1"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["jjy <jjyruby@gmail.com>"]
 edition = "2018"
 license = "MIT"

@@ -47,7 +47,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "ckb-lib-rsa"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "blake2b-rs",
  "ckb-std",
@@ -57,7 +57,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-lib-secp256k1"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "blake2b-rs",
  "ckb-std",
@@ -65,7 +65,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-lib-smt"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "blake2b-rs",
  "cc",
