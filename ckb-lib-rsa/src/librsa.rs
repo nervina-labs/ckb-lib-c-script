@@ -1,34 +1,12 @@
-use crate::alloc::{
-    alloc::{alloc, Layout},
-    boxed::Box,
-    vec::*,
-};
-use crate::code_hashes::CODE_HASH_RSA;
-use ckb_std::{
-    dynamic_loading_c_impl::{CKBDLContext, Symbol},
-};
+use core::ptr::null;
+
+use crate::alloc::vec::*;
+use ckb_std::dynamic_loading_c_impl::CKBDLContext;
 use email_rs::Email;
 
 const CKB_VERIFY_RSA: u32 = 1;
-/// function signature of validate_secp256k1_blake2b_sighash_all
-type ValidateRSASighashAll = unsafe extern "C" fn(pubkey_hash: *const u8) -> i32;
-/// function signature of validate_signature
-// type ValidateSignature = unsafe extern "C" fn(
-//     prefilled_data: *const u8,
-//     signature_buffer: *const u8,
-//     signature_size: u64,
-//     message_buffer: *const u8,
-//     message_size: u64,
-//     output: *mut u8,
-//     output_len: *mut u64,
-// ) -> i32;
 
-/// Symbol name
-const VALIDATE_RSA_SIGHASH_ALL: &[u8; 24] = b"validate_rsa_sighash_all";
-// const VALIDATE_SIGNATURE: &[u8; 18] = b"validate_signature";
-
-const SECP256K1_DATA_SIZE: usize = 256; //1048576;
-pub struct PrefilledData(Box<[u8; SECP256K1_DATA_SIZE]>);
+pub struct PrefilledData;
 pub struct PubkeyHash([u8; 20]);
 
 impl PubkeyHash {
@@ -61,90 +39,31 @@ extern "C" {
         output: *mut u8,
         output_len: *mut u64,
     ) -> isize;
-    // fn validate_signature_secp256k1(
-    //     prefilled_data: *const u8,
-    //     signature_buffer: *const u8,
-    //     signature_size: u64,
-    //     msg_buf: *const u8,
-    //     msg_size: u64,
-    //     output: *mut u8,
-    //     output_len: *mut u64,
-    // ) -> i32;
-    // fn validate_secp256k1_blake2b_sighash_all(output_public_key_hash: *mut u8) -> i32;
-    //     fn ckb_smt_verify(
-    //         root: *const u8,
-    //         smt_pair_len: u32,
-    //         keys: *const u8,
-    //         values: *const u8,
-    //         proof: *const u8,
-    //         proof_length: u32,
-    //     ) -> i32;
 }
 
-pub struct LibRSA {
-    // validate_rsa_sighash_all: Symbol<ValidateRSASighashAll>,
-    // validate_signature: Symbol<ValidateSignature>,
-}
+pub struct LibRSA;
 
 impl LibRSA {
-    pub fn load<T>(context: &mut CKBDLContext<T>) -> Self {
-        // load library
-        // let lib = context.load(&CODE_HASH_RSA).expect("load rsa");
-
-        // // find symbols
-        // let validate_rsa_sighash_all: Symbol<ValidateRSASighashAll> =
-        //     unsafe { lib.get(VALIDATE_RSA_SIGHASH_ALL).expect("load function") };
-        // let validate_signature: Symbol<ValidateSignature> =
-        //     unsafe { lib.get(VALIDATE_SIGNATURE).expect("load function") };
-        LibRSA {
-            // validate_rsa_sighash_all,
-            // validate_signature,
-        }
+    pub fn load<T>(_context: &mut CKBDLContext<T>) -> Self {
+        LibRSA
     }
 
     pub fn load_prefilled_data(&self) -> Result<PrefilledData, i32> {
-        let data = unsafe {
-            let layout = Layout::new::<[u8; 256]>();
-            let raw_allocation = alloc(layout) as *mut [u8; 256];
-            Box::from_raw(raw_allocation)
-        };
-        Ok(PrefilledData(data))
+        Ok(PrefilledData)
     }
-
-    // pub fn validate_rsa_sighash_all(&self, pubkey_hash: &mut [u8; 20]) -> Result<(), i32> {
-    //     let f = &self.validate_rsa_sighash_all;
-    //     let error_code = unsafe { f(pubkey_hash.as_mut_ptr()) };
-    //     if error_code != 0 {
-    //         return Err(error_code);
-    //     }
-    //     Ok(())
-    // }
 
     pub fn validate_signature(
         &self,
-        prefilled_data: &PrefilledData,
+        _prefilled_data: &PrefilledData,
         signature: &[u8],
         message: &[u8],
     ) -> Result<PubkeyHash, i32> {
         let mut pubkeyhash = PubkeyHash::default();
         let mut len: u64 = pubkeyhash.0.len() as u64;
 
-        // let f = &self.validate_signature;
-        // let error_code = unsafe {
-        //     f(
-        //         prefilled_data.0.as_ptr(),
-        //         signature.as_ptr(),
-        //         signature.len() as u64,
-        //         message.as_ptr(),
-        //         message.len() as u64,
-        //         pubkeyhash.0.as_mut_ptr(),
-        //         &mut len as *mut u64,
-        //     )
-        // };
-
         let error_code = unsafe {
             validate_signature_rsa(
-                prefilled_data.0.as_ptr(),
+                null(),
                 signature.as_ptr(),
                 signature.len() as u64,
                 message.as_ptr(),
@@ -167,7 +86,7 @@ impl LibRSA {
             .into_iter()
             .zip(email.dkim_headers.iter())
             .find(|(dkim_msg, dkim_header)| {
-                let handle = ||{
+                let handle = || {
                     let sig = &dkim_header.signature;
                     let rsa_info = LibRSA::get_rsa_info(&n, e, &sig)?;
 
