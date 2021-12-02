@@ -50,12 +50,6 @@ checksum = "d26a6ce4b6a484fa3edb70f7efa6fc430fd2b87285fe8b84304fd0936faa0dc0"
 
 [[package]]
 name = "cfg-if"
-version = "0.1.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
-
-[[package]]
-name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
@@ -65,7 +59,7 @@ name = "ckb-lib-rsa"
 version = "0.1.0"
 dependencies = [
  "blake2b-rs 0.1.5",
- "ckb-std 0.9.0",
+ "ckb-std",
  "email-rs",
  "sha2",
 ]
@@ -75,7 +69,7 @@ name = "ckb-lib-secp256k1"
 version = "0.1.0"
 dependencies = [
  "blake2b-rs 0.1.5",
- "ckb-std 0.9.0",
+ "ckb-std",
 ]
 
 [[package]]
@@ -84,17 +78,7 @@ version = "0.1.0"
 dependencies = [
  "blake2b-rs 0.2.0",
  "cc",
- "ckb-std 0.7.4",
-]
-
-[[package]]
-name = "ckb-standalone-types"
-version = "0.0.1-pre.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af2cdbdf65ee5b1da71504f5a03d6984bce77d0b4b46daff63f4ba4a3b0eef08"
-dependencies = [
- "cfg-if 0.1.10",
- "molecule 0.6.1",
+ "ckb-std",
 ]
 
 [[package]]
@@ -103,19 +87,8 @@ version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "22d7cbbdab96e6b809a102cf88bfec28795a0a3c06bfdea4abe4de89777801cd"
 dependencies = [
- "cfg-if 1.0.0",
- "molecule 0.7.2",
-]
-
-[[package]]
-name = "ckb-std"
-version = "0.7.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5247e68ff32c17714105e2460db6113fb99efde8c830bbdd99f8bf715100dd64"
-dependencies = [
- "buddy-alloc",
- "cc",
- "ckb-standalone-types 0.0.1-pre.1",
+ "cfg-if",
+ "molecule",
 ]
 
 [[package]]
@@ -126,7 +99,7 @@ checksum = "e5761f11372e794d77b8e8a8059b22c5d6ccef907588dd5302a669f056ecce6b"
 dependencies = [
  "buddy-alloc",
  "cc",
- "ckb-standalone-types 0.1.2",
+ "ckb-standalone-types",
  "cstr_core",
 ]
 
@@ -196,20 +169,11 @@ checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
 
 [[package]]
 name = "molecule"
-version = "0.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3067ceba3d7f5dcc7427cfc584fc506e756f1161151032fec840455f5a3c2fd5"
-dependencies = [
- "cfg-if 0.1.10",
-]
-
-[[package]]
-name = "molecule"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "be5f63176422224eadd975789462a96cedaf339cd1009ef92fbdfaad39d35f5f"
 dependencies = [
- "cfg-if 1.0.0",
+ "cfg-if",
 ]
 
 [[package]]
@@ -225,7 +189,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b69f9a4c9740d74c5baa3fd2e547f9525fa8088a8a958e0ca2409a514e33f5fa"
 dependencies = [
  "block-buffer",
- "cfg-if 1.0.0",
+ "cfg-if",
  "cpufeatures",
  "digest",
  "opaque-debug",
